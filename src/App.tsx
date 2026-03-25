@@ -16,7 +16,8 @@ import type { HadithRecord, PreparedVerse, StreamSettings } from './types'
 import { loadHadithContent, loadQuranContent } from './utils/contentLoader'
 import { clampIndex, formatVerseLabel, prepareVerseRecords } from './utils/verse'
 
-const STORAGE_KEY = 'desktopagent-stream-settings-v1'
+const STORAGE_KEY = 'tiktok-recitation-overlay-stream-settings-v1'
+const LEGACY_STORAGE_KEY = 'desktopagent-stream-settings-v1'
 const DEFAULT_SETTINGS: StreamSettings = {
   showHadith: true,
   selectedVerseId: '',
@@ -31,7 +32,9 @@ function loadSettings(): StreamSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS
 
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY) ??
+      window.localStorage.getItem(LEGACY_STORAGE_KEY)
     if (!raw) return DEFAULT_SETTINGS
 
     const parsed = JSON.parse(raw) as Partial<StreamSettings>
